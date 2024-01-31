@@ -2,7 +2,7 @@
     $commandes=true;
     include_once __DIR__ ."/header.php";  
     include_once __DIR__ ."/main.php";
-        if(!empty($_GET["id"])){
+    if(!empty($_GET["id"])){
     $listidclient= [];
 //  Modifier les informations de la commande  séléctionné
     //  Récupérer et afficher les informations de la commande 
@@ -16,7 +16,15 @@
         // Récupérer tous les résultats sous forme de tableau associatif
         while($commande= $PDOStatement->fetch(PDO::FETCH_ASSOC)):
         // echo "Le client existe dans la base de donnée";  
-        
+// La liste déroulante des idclients (commande)
+    // Préparer et exécuter une requête SELECT pour récupérer tous les idclient de la table commande
+      $query = "SELECT idclient FROM commande";
+      $PDOStatement= $pdo->prepare($query);
+      // Exécuter la requête
+      $PDOStatement->execute();
+      // Récupérer tous les résultats sous forme de tableau associatif
+      $tabidclients=$PDOStatement->fetchAll(PDO::FETCH_NUM);   
+    //   var_dump( $tabidclients);
 
 ?>
         <h2  class="mt-5">Modifier la commande</h2>
@@ -24,7 +32,16 @@
         <input type="hidden" name="myidcommande" value="<?php echo $commande['idcommande']?>">
             <div class="col-md-6">             
                 <label for="idclient"  class="form-label">ID client:</label>
-                <input type="text"  class="form-control" id="idclient" name="idclient" value="<?php echo $commande["idclient"]?>" required>
+                <select class="form-control" name="idclientliste">
+                    <?php
+                        foreach( $tabidclients as  $tabidclient){
+                            foreach($tabidclient as $tabidclientlist){
+                                echo "<option >".$tabidclientlist."</option>";
+                            }
+                        }
+                    ?>
+                </select>
+                <input type="text"  class="form-control" id="idclient" name="idclient" value="<?php echo $commande["idclient"]?>"required>
             </div>
             <div class="col-md-6">
                 <label for="date_commande" class="form-label">Date :</label>
@@ -57,6 +74,7 @@
 <?php
   include_once ("footer.php");
 ?>
+
   
 
 
