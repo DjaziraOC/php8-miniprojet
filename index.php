@@ -5,6 +5,18 @@
 <!-- Appéler la bibliothèque jQuery: hosted libraries-->
 <!-- Intégrer la database jquery -->
 <!-- Initialisation DataTables -->
+<!-- Connexion à la base de données PDO -->
+  <!-- créer le fichier connexion: -->
+    <!-- Connexion à la base de données avec PDO -->
+    <!-- Configurer PDO pour générer des exceptions en cas d'erreur SQL -->
+    <!-- afficher le problème avec la méthode getMessage,getFile(),getLine() -->
+  <!-- Fermer la connexion lorsque vous avez terminé -->
+  <!-- créer le fichier main  -->
+<!-- Affichage SELECT-Afficher tous les clients de la base de données -->
+  <!-- Préparer et exécuter une requête SELECT pour récupérer tous les clients  -->
+  <!-- Exécuter la requête: $query-> execute(); -->
+  <!-- Récupérez tous les résultats sous forme de tableau associatif(où les noms de colonnes servent de clés pour les valeurs correspondantes.) -->
+  <!-- Afficher les résultats (Tous les clients) à l'aide de la boule foreach  -->
 <?php
   $index = true;
   include_once __DIR__ . "/header.php";

@@ -3,12 +3,12 @@
     include_once __DIR__ . "/main.php";
     // Vérifiez si l'ID existe dans l'URL
     if (!empty($_GET["idarticle"])) {
-    // Récupérez l'ID de l'URL du client à supprimer
+    // Récupérez l'ID de l'URL du l'article à supprimer
         $idarticle = $_GET["idarticle"];
         var_dump($idarticle);
-    // Supprimer les clients 
+    // Supprimer l'article sélectionné
         echo "L'ID récupéré de l'URL est : " . $idarticle;
-    // Préparer la requête SQL pour supprimer le client
+    // Préparer la requête SQL pour supprimer l'article
         $requete =$pdo->prepare("DELETE FROM article WHERE idarticle = :idarticle ");
     // Binder les valeurs des paramètres
         $requete->bindParam(":idarticle", $idarticle, PDO::PARAM_INT);
