@@ -2,7 +2,7 @@
     $commandes=true;
     include_once __DIR__ ."/header.php";  
     include_once __DIR__ ."/main.php";
-    if(!empty($_GET["id"])){
+if(!empty($_GET["id"])){
     $listidclient= [];
 //  Modifier les informations de la commande  séléctionné
     //  Récupérer et afficher les informations de la commande 
@@ -25,7 +25,6 @@
       // Récupérer tous les résultats sous forme de tableau associatif
       $tabidclients=$PDOStatement->fetchAll(PDO::FETCH_NUM);   
     //   var_dump( $tabidclients);
-
 ?>
         <h2  class="mt-5">Modifier la commande</h2>
         <form class="row g-3"  method="POST">
@@ -36,12 +35,17 @@
                     <?php
                         foreach( $tabidclients as  $tabidclient){
                             foreach($tabidclient as $tabidclientlist){
-                                echo "<option >".$tabidclientlist."</option>";
+                                echo "<option value=".$tabidclientlist.">".$tabidclientlist."</option>";
                             }
                         }
                     ?>
                 </select>
-                <input type="text"  class="form-control" id="idclient" name="idclient" value="<?php echo $commande["idclient"]?>"required>
+                <input type="text"  class="form-control" id="idclient" name="idclient" value="<?php 
+                    // récupérer et afficher la valeur sélectionnée
+                    echo(!empty($_POST["idclient"]))? $_POST["idclientliste"]:$commande["idclient"];
+                ?>
+                
+                "required>
             </div>
             <div class="col-md-6">
                 <label for="date_commande" class="form-label">Date :</label>
@@ -61,7 +65,7 @@
             $PDOStatement= $pdo->prepare($request);
             //l'excution de la requête 
             $PDOStatement->execute([
-                "idclient"=>$_POST["idclient"],
+                "idclient"=>$_POST["idclientliste"],
                 "date_commande"=>$_POST["date_commande"],
                 "id"=>$_POST["myidcommande"]
             ]);
