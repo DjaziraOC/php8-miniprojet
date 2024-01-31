@@ -9,7 +9,7 @@
     // Supprimer les clients 
         echo "L'ID récupéré de l'URL est : " . $id;
     // Préparer la requête SQL pour supprimer le client
-        $requete =$pdo->prepare("DELETE FROM client WHERE id = :id ");
+        $requete =$pdo->prepare("DELETE FROM client WHERE idclient = :id ");
     // Binder les valeurs des paramètres
         $requete->bindParam(":id", $id, PDO::PARAM_INT);
     // Exécuter la requête
