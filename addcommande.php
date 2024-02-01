@@ -2,14 +2,23 @@
 $commandes=true;
 include_once __DIR__ . "/header.php";
 include_once __DIR__ . "/main.php";
-$errors =[] ;
+
+// La liste déroulante des idclients (commande)
+    // Préparer et exécuter une requête SELECT pour récupérer tous les idclient de la table commande
+    $query = "SELECT idclient FROM client";
+    $PDOStatement= $pdo->prepare($query);
+    // Exécuter la requête
+    $PDOStatement->execute();
+    // Récupérer tous les résultats sous forme de tableau associatif
+    $tabidclients=$PDOStatement->fetchAll(PDO::FETCH_NUM);   
+    var_dump( $tabidclients);
 //---s'assurer qu'aucun champ de formulaire est vide 
 if(!empty($_POST["idclient"])&&!empty($_POST["date_commande"])){
     try{
         $query = "INSERT INTO  commande (idclient,date_commande) VALUES (:idclient,:date_commande)";
         $pdoStmt= $pdo->prepare($query);
         // $pdoStmt->execute(["nom"=>$_POST["nom"], "prenom"=>$_POST["prenom"],"telephone"=>$_POST["telephone"]]);
-        $pdoStmt->bindParam(':idclient', $_POST["idclient"]);
+        $pdoStmt->bindParam(':idclient', $_POST["idclient"],PDO::PARAM_INT);
         $pdoStmt->bindParam(':date_commande', $_POST["date_commande"]);
         //l'excution de la requête 
         if ($message=$pdoStmt->execute()){
@@ -25,13 +34,23 @@ if(!empty($_POST["idclient"])&&!empty($_POST["date_commande"])){
             $pdoStmt->closeCursor();
         // header(header:"/Location:clients.php");
     }
-} 
+}
+?>
+ 
 ?>
     <h1 class="mt-5">Ajouter une commande</h1>
     <form class="row g-3" action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
         <div class="col-md-6">
             <label for="idclient" class="form-label">ID client</label>
-            <input type="text" class="form-control" id="idclient" name="idclient" required>
+            <select class="form-control" name="idclient">
+                <?php
+                    foreach($tabidclients as $tabidclient){
+                        foreach($tabidclient as $tabidclientvalue){
+                            echo "<option value=".$tabidclientvalue.">".$tabidclientvalue."</option>";
+                        }
+                    }
+                ?>
+            </select>
         </div>
         <div class="col-md-6">
             <label for="date_commande" class="form-label">Date</label>
@@ -47,7 +66,6 @@ if(!empty($_POST["idclient"])&&!empty($_POST["date_commande"])){
     </form>
 </div>
 </main>
-
-<?php
+<?php 
   include_once ("footer.php");
 ?>
