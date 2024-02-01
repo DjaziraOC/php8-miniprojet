@@ -4,8 +4,8 @@
     include_once __DIR__ ."/main.php";
 if(!empty($_GET["id"])){
     $listidclient= [];
-//  Modifier les informations de la commande  séléctionné
-    //  Récupérer et afficher les informations de la commande 
+//  Modifier les informations de la commande  séléctionnée
+    //Récupérer et afficher les informations de la commande 
         // Préparer et exécuter une requête SELECT pour récupérer tous les clients 
         $query = "SELECT * FROM commande WHERE idcommande=:idcommande";
         $PDOStatement= $pdo->prepare($query);
@@ -18,13 +18,13 @@ if(!empty($_GET["id"])){
         // echo "Le client existe dans la base de donnée";  
 // La liste déroulante des idclients (commande)
     // Préparer et exécuter une requête SELECT pour récupérer tous les idclient de la table commande
-      $query = "SELECT idclient FROM commande";
-      $PDOStatement= $pdo->prepare($query);
-      // Exécuter la requête
-      $PDOStatement->execute();
-      // Récupérer tous les résultats sous forme de tableau associatif
-      $tabidclients=$PDOStatement->fetchAll(PDO::FETCH_NUM);   
-    //   var_dump( $tabidclients);
+        $query = "SELECT idclient FROM client";
+        $PDOStatement= $pdo->prepare($query);
+        // Exécuter la requête
+        $PDOStatement->execute();
+        // Récupérer tous les résultats sous forme de tableau associatif
+        $tabidclients=$PDOStatement->fetchAll(PDO::FETCH_NUM);   
+        // var_dump( $tabidclients);
 ?>
         <h2  class="mt-5">Modifier la commande</h2>
         <form class="row g-3"  method="POST">
@@ -33,19 +33,16 @@ if(!empty($_GET["id"])){
                 <label for="idclient"  class="form-label">ID client:</label>
                 <select class="form-control" name="idclientliste">
                     <?php
-                        foreach( $tabidclients as  $tabidclient){
-                            foreach($tabidclient as $tabidclientlist){
-                                echo "<option value=".$tabidclientlist.">".$tabidclientlist."</option>";
+                    //la liste déroulante idclient-modifier la commande
+                        foreach($tabidclients as $tabidclient){
+                            foreach($tabidclient as $idclientvalue){
+                                //séléctionner la commande à modifier en affichant son idclient sur la liste déroulante
+                                $selected=($commande['idclient']==$idclientvalue)?"selected":"";
+                                echo "<option value=".$idclientvalue." ".$selected.">".$idclientvalue."</option>";
                             }
-                        }
+                        }                  
                     ?>
-                </select>
-                <input type="text"  class="form-control" id="idclient" name="idclient" value="<?php 
-                    // récupérer et afficher la valeur sélectionnée
-                    echo(!empty($_POST["idclient"]))? $_POST["idclientliste"]:$commande["idclient"];
-                ?>
-                
-                "required>
+                </select>          
             </div>
             <div class="col-md-6">
                 <label for="date_commande" class="form-label">Date :</label>
@@ -69,6 +66,7 @@ if(!empty($_GET["id"])){
                 "date_commande"=>$_POST["date_commande"],
                 "id"=>$_POST["myidcommande"]
             ]);
+            $PDOStatement->closeCursor();
             // header("location:commandes.php");  
         }
     }else{
