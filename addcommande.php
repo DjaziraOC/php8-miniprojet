@@ -32,15 +32,15 @@ if(!empty($_POST["quantite"])&&!empty($_POST["date_commande"])){
         $pdoStmt->bindParam(':date_commande', $_POST["date_commande"]);
         //l'excution de la requête 
         $pdoStmt->execute();
-        //Récupération de l'ID de la dernière ligne insérée 
-        $idcommandes=$pdo->lastInsertId();
+        //Récupération de l'ID généré 
+        $idtablecommande=$pdo->lastInsertId();
       
     // L'interface ligne_commande
         // Préparation de la requête
         $query3 = "INSERT INTO  ligne_commande (idcommande,idarticle,quantite) VALUES (:idcommande,:idarticle,:quantite)";
         $pdoStmt3= $pdo->prepare($query3);
         // Liaison des paramètres
-        $pdoStmt3->bindParam(':idcommande',$idcommandes);
+        $pdoStmt3->bindParam(':idcommande', $idtablecommande);
         $pdoStmt3->bindParam(':idarticle',$_POST["idarticlelist"]);
         $pdoStmt3->bindParam(':quantite',$_POST["quantite"]);
         //l'excution de la requête 
