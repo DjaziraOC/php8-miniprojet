@@ -3,20 +3,18 @@
   include_once __DIR__ . "/header.php";
   include_once __DIR__ . "/main.php";
   // gérer la clé étrangère/désactiver la clé idcommande
-  // Préparer et exécuter une requête SELECT pour récupérer tous les clients 
+  // Préparer et exécuter une requête SELECT pour récupérer les idcommandes
   $count = 0;
   $list=[];
   $query = "SELECT idcommande FROM commande WHERE idcommande IN(SELECT idcommande FROM ligne_commande WHERE ligne_commande.idcommande = commande.idcommande)";
   $PDOstmt = $pdo->prepare( $query);
   $PDOstmt->execute();
-  // afficher les idclient
   // var_dump($PDOstmt->fetchAll(mode:PDO::FETCH_NUM));
   foreach($PDOstmt->fetchAll(mode:PDO::FETCH_NUM) as $tabvalue){
     foreach($tabvalue as $value){
       $list[]=$value;
     } 
   }
-  // var_dump($list);
   //<!-- Affichage SELECT-Afficher toutes les commades de la base de données -->
     // Préparer et exécuter une requête SELECT pour récupérer tous les clients 
     $query=$pdo->prepare("SELECT * FROM commande");
@@ -62,7 +60,7 @@
               </svg>
             </a>
               <!-- Bouton pour ouvrir le modal -->
-            <button type="button" class="btn btn-danger"  data-bs-toggle="modal"  data-bs-target="#deleteModal<?php echo $count?>">
+            <button type="button" class="btn btn-danger"  data-bs-toggle="modal"  <?php if(in_array($ligne["idcommande"],$list)){echo "disabled";}?>  data-bs-target="#deleteModal<?php echo $count?>">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                 <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
               </svg>
