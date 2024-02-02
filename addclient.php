@@ -4,18 +4,17 @@ include_once __DIR__ . "/header.php";
 include_once __DIR__ . "/main.php";
 $errors =[] ;
 //---s'assurer qu'aucun champ de formulaire est vide 
-if(!empty($_POST["nom"])&&!empty($_POST["prenom"]) && !empty($_POST["telephone"])){
+if(!empty($_POST["nom"])&&!empty($_POST["ville"]) && !empty($_POST["telephone"])){
     try{
-        $query = "INSERT INTO  client (nom,prenom,telephone) VALUES (:nom,:prenom,:telephone)";
+        $query = "INSERT INTO  client (nom,ville,telephone) VALUES (:nom,:ville,:telephone)";
         $pdoStmt= $pdo->prepare($query);
-        // $pdoStmt->execute(["nom"=>$_POST["nom"], "prenom"=>$_POST["prenom"],"telephone"=>$_POST["telephone"]]);
+        // $pdoStmt->execute(["nom"=>$_POST["nom"], "ville"=>$_POST["ville"],"telephone"=>$_POST["telephone"]]);
         $pdoStmt->bindParam(':nom', $_POST["nom"]);
-        $pdoStmt->bindParam(':prenom', $_POST["prenom"]);
+        $pdoStmt->bindParam(':ville', $_POST["ville"]);
         $pdoStmt->bindParam(':telephone', $_POST["telephone"]);
         //l'excution de la requête 
-        if ($message=$pdoStmt->execute()) {
-            // echo "les données de formulaire sont sauvegarder dans la BD avec succée.";
-            $messageS ['messages']="les données de formulaire sont sauvegarder dans la BD avec succée.";
+        if ($pdoStmt->execute()) {
+            echo "les données de formulaire sont sauvegarder dans la BD avec succée.";
         } else {
             echo "Erreur d'execution SQL statement: " . $pdoStmt->errorInfo()[2];
         }
@@ -35,8 +34,8 @@ if(!empty($_POST["nom"])&&!empty($_POST["prenom"]) && !empty($_POST["telephone"]
             <input type="text" class="form-control" id="nom" name="nom" required>
         </div>
         <div class="col-md-6">
-            <label for="prenom" class="form-label">Prénom</label>
-            <input type="text" class="form-control" id="prenom" name="prenom" required>
+            <label for="ville" class="form-label">Ville</label>
+            <input type="text" class="form-control" id="ville" name="ville" required>
         </div>
         <div class="col-md-12">
             <label for="telephone" class="form-label">Téléphone</label>

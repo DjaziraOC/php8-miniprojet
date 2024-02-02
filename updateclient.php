@@ -24,8 +24,8 @@
                 <input type="text"  class="form-control" id="nom" name="nom" value="<?php echo $client["nom"]?>" required>
             </div>
             <div class="col-md-6">
-                <label for="prenom" class="form-label">Prénom :</label>
-                <input type="text"  class="form-control" id="prenom" name="prenom" value="<?php echo $client["prenom"]?>" required>
+                <label for="ville" class="form-label">Ville :</label>
+                <input type="text"  class="form-control" id="ville" name="ville" value="<?php echo $client["ville"]?>" required>
             </div>
             <div class="col-md-6">    
                 <label for="telephone"  class="form-label">Télephone :</label>
@@ -41,12 +41,12 @@
         endwhile;
         $PDOStatement->closeCursor();
         if(!empty($_POST)){
-            $request = "UPDATE client SET nom =:nom, prenom =:prenom, telephone =:telephone WHERE idclient = :id";
+            $request = "UPDATE client SET nom =:nom, ville =:ville, telephone =:telephone WHERE idclient = :id";
             $PDOStatement= $pdo->prepare($request);
             //l'excution de la requête 
             $PDOStatement->execute([
                 "nom"=>$_POST["nom"],
-                "prenom"=>$_POST["prenom"],
+                "ville"=>$_POST["ville"],
                 "telephone"=>$_POST["telephone"],
                 "id"=>$_POST["myid"]
             ]);

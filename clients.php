@@ -33,7 +33,7 @@
     $query-> execute();
     // Récupérez tous les résultats sous forme de tableau associatif(où les noms de colonnes servent de clés pour les valeurs correspondantes.)
     $lignes = $query->fetchAll(mode:PDO::FETCH_ASSOC); 
-    //Afficher les résultats (Tous les clients)avec foreach appliqué sur <td></td>(foreach $lignes as $ligne){$alllignes = [$ligne['idclient'] , $ligne['nom'], $ligne['prenom'], $ligne['telephone']];}
+    //Afficher les résultats (Tous les clients)avec foreach appliqué sur <td></td>(foreach $lignes as $ligne){$alllignes = [$ligne['idclient'] , $ligne['nom'], $ligne['ville'], $ligne['telephone']];}
 ?>
 
 <!-- Begin page content -->
@@ -49,7 +49,7 @@
           <tr>
               <th>ID</th>
               <th>Nom</th>
-              <th>Prénom</th>
+              <th>Ville</th>
               <th>Téléphone</th>
               <th>Action</th>
           </tr>
@@ -62,7 +62,7 @@
         <tr>
           <td><?php echo $ligne["idclient"]?></td>
           <td><?php echo $ligne["nom"]?></td>
-          <td><?php echo $ligne["prenom"]?></td>
+          <td><?php echo $ligne["ville"]?></td>
           <td><?php echo $ligne["telephone"]?></td>
           <td> 
             <!-- Bouton pour ouvrir le modal -->
