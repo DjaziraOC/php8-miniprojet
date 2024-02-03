@@ -39,6 +39,32 @@
         // Récupérer tous les résultats sous forme de tableau associatif
         $tabidclients=$PDOStatement->fetchAll(PDO::FETCH_NUM);   
         // var_dump( $tabidclients)
+        
+// stocker le nombre de vues & Mettre à jour le compteur de vues chaque fois que la page est chargée.
+        // Nom de la page 
+        $pageName = basename($_SERVER['PHP_SELF']);
+        // var_dump($pageName);
+        // Vérifier si la page est déjà enregistrée dans la table
+        $query = "SELECT vues FROM commande WHERE nom_page = :nom_page";
+        $statement = $pdo->prepare($query);
+        $statement->bindParam(':nom_page', $pageName, PDO::PARAM_STR);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        var_dump($result);
+
+    if (!$result) {
+        // Si la page n'est pas dans la table, l'ajouter
+        $query = "INSERT INTO commande (nom_page,vues) VALUES (:nom_page,1)";
+        $statement = $pdo->prepare($query);
+        $statement->bindParam(':nom_page', $pageName, PDO::PARAM_STR);
+        $statement->execute();
+    } else {
+        // Sinon, mettre à jour le compteur de vues
+        $query = "UPDATE commande SET vues = vues + 1 WHERE nom_page = :nom_page";
+        $statement = $pdo->prepare($query);
+        $statement->bindParam(':nom_page', $pageName, PDO::PARAM_STR);
+        $statement->execute();
+    }
 
 ?>
         <h2  class="mt-5">Détail de la commande </h2>
