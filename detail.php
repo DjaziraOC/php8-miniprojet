@@ -39,34 +39,46 @@
         // Récupérer tous les résultats sous forme de tableau associatif
         $tabidclients=$PDOStatement->fetchAll(PDO::FETCH_NUM);   
         // var_dump( $tabidclients)
-        
-// stocker le nombre de vues & Mettre à jour le compteur de vues chaque fois que la page est chargée.
-        // Nom de la page 
-        $pageName = basename($_SERVER['PHP_SELF']);
-        // var_dump($pageName);
-        // Vérifier si la page est déjà enregistrée dans la table
-        $query = "SELECT vues FROM commande WHERE nom_page = :nom_page";
-        $statement = $pdo->prepare($query);
-        $statement->bindParam(':nom_page', $pageName, PDO::PARAM_STR);
-        $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        var_dump($result);
 
+// stocker le nombre de vues & Mettre à jour le compteur de vues chaque fois qu'on séléctionne la commande .
+        // Nom de la page // $pageName = basename($_SERVER['PHP_SELF']);
+        // Utiliser l'URL complète comme clé // $pageKey = $_SERVER['REQUEST_URI']; 
+        // Utiliser l'id (url) comme clé 
+        $pageKey = $_GET['id']; 
+        // var_dump($pageKey); 
+    
+        // Vérifier si la page est déjà enregistrée dans la table
+        $query = "SELECT vues FROM commande WHERE idcommande = :idcommande";
+        $statement = $pdo->prepare($query);
+        $statement->bindParam(':idcommande', $pageKey, PDO::PARAM_INT);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);  
+        // var_dump($result);
     if (!$result) {
         // Si la page n'est pas dans la table, l'ajouter
-        $query = "INSERT INTO commande (nom_page,vues) VALUES (:nom_page,1)";
+        $query = "INSERT INTO commande (idcommande,vues) VALUES (:idcommande,1)";
         $statement = $pdo->prepare($query);
-        $statement->bindParam(':nom_page', $pageName, PDO::PARAM_STR);
+        $statement->bindParam(':idcommande', $pageKey, PDO::PARAM_INT);
         $statement->execute();
     } else {
         // Sinon, mettre à jour le compteur de vues
-        $query = "UPDATE commande SET vues = vues + 1 WHERE nom_page = :nom_page";
+        $query = "UPDATE commande SET vues = vues + 1 WHERE idcommande = :idcommande";
         $statement = $pdo->prepare($query);
-        $statement->bindParam(':nom_page', $pageName, PDO::PARAM_STR);
+        $statement->bindParam(':idcommande', $pageKey, PDO::PARAM_INT);
         $statement->execute();
     }
-
-?>
+?> 
+        <?php foreach($result as $value){
+            $viewnumber = $value;
+        ?>
+        <button class="btn btn-primary" style="float:right;margin-bottom:20px;"> 
+                <?php echo  $viewnumber ?>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                </svg>
+        </button>
+        <?php }?>
         <h2  class="mt-5">Détail de la commande </h2>
         <form class="row g-3" action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
         <input type="hidden" name="myidcommande" value="<?php echo $ligne['idcommande']?>">
@@ -121,15 +133,12 @@
                 <input type="text" class="form-control" id="quantite" name="quantite" value="<?php echo $ligne["quantite"]?>" disabled>
             </div>
             <div class="col-md-12"> 
-                <button type="submit" name="submit" class="btn btn-primary">Fermer</button>
+                <a href="index.php" type="submit" name="submit" class="btn btn-primary">Fermer</a>
             </div>
         </form>
     </div>
 </main>  
 <?php   
-        // endwhile;
-        // endwhile;
-        // $PDOStatement->closeCursor();
         $PDOStatement2->closeCursor();
         try{
             if(!empty($_POST)){
@@ -141,9 +150,7 @@
         }
     }else{
         echo "ID du coommande non spécifié.";
-    }  
-    
-    // $PDOstatment->closeCursor();  
+    }   
 ?>
 <?php
   include_once ("footer.php");
